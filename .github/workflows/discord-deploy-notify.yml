@@ -1,0 +1,52 @@
+name: Discord Deploy Notify
+
+# "Deploy"라는 이름(name)의 워크플로우가 생기면 자동으로 시작/완료 알림이 전송된다.
+on:
+  workflow_run:
+    workflows: ["Deploy"]
+    types: [requested, completed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord notification
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          EVENT_ACTION: ${{ github.event.action }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          ACTOR: ${{ github.event.workflow_run.actor.login }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ "$EVENT_ACTION" = "requested" ]; then
+            title="🚀 배포 시작"
+            color=3447003
+          elif [ "$CONCLUSION" = "success" ]; then
+            title="✅ 배포 완료"
+            color=5763719
+          else
+            title="❌ 배포 실패 (${CONCLUSION})"
+            color=15548997
+          fi
+          payload=$(jq -n \
+            --arg title "$title" \
+            --arg url "$RUN_URL" \
+            --arg repo "$REPO" \
+            --arg branch "$HEAD_BRANCH" \
+            --arg actor "$ACTOR" \
+            --argjson color "$color" \
+            '{
+              embeds: [{
+                title: $title,
+                url: $url,
+                color: $color,
+                fields: [
+                  {name: "레포", value: $repo, inline: true},
+                  {name: "브랜치", value: $branch, inline: true},
+                  {name: "실행자", value: $actor, inline: true}
+                ]
+              }]
+            }')
+          curl -sf -H "Content-Type: application/json" -d "$payload" "$WEBHOOK_URL"

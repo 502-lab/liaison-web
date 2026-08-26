@@ -1,4 +1,9 @@
 # liaison-web
-## Setup Check
 
-PR 알림 및 CodeRabbit 리뷰 동작 확인용 테스트 변경입니다.
+## 📚 컨벤션
+
+작업 전에 아래 문서를 확인해주세요.
+
+- [커밋 컨벤션](COMMIT_CONVENTION.md)
+- [브랜치 컨벤션](BRANCH_CONVENTION.md)
+- [PR 템플릿](.github/PULL_REQUEST_TEMPLATE.md)

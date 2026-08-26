@@ -1,24 +1,27 @@
 
 
 # liaison-web
+> 학원 숙제 공지와 학생별 진도를 함께 관리하는 알림장 서비스, `liaison`의 프론트엔드 레포지토리입니다.
+
+🔗 **배포 링크** · [Production](https://) | [Preview](https://)
 
 ## 📚 컨벤션
 
 작업 전에 아래 문서를 확인해주세요.
 
-- [커밋 컨벤션](COMMIT_CONVENTION.md)
-- [브랜치 컨벤션](BRANCH_CONVENTION.md)
-- [PR 템플릿](.github/PULL_REQUEST_TEMPLATE.md)
-
-> 학원 숙제 공지와 학생별 진도를 함께 관리하는 알림장 서비스, `liaision`의 프론트엔드 레포지토리입니다.
-
-**배포 링크** · [Production](https://) | [Preview](https://)
+📝 [커밋 컨벤션](COMMIT_CONVENTION.md)<br>
+🌿 [브랜치 컨벤션](BRANCH_CONVENTION.md)<br>
+🔀 [PR 템플릿](.github/PULL_REQUEST_TEMPLATE.md)
 
 ---
 
 ## 📑 목차
 
-- [liaision](#liaision)
+<details>
+<summary>목차 세부내용 확인하기</summary>
+
+- [liaison-web](#liaison-web)
+  - [📚 컨벤션](#-컨벤션)
   - [📑 목차](#-목차)
   - [✨ 주요 기능](#-주요-기능)
     - [👥 사용자 역할](#-사용자-역할)
@@ -40,6 +43,8 @@
     - [스크립트](#스크립트)
     - [환경 변수](#환경-변수)
 
+</details>
+
 ---
 
 ## ✨ 주요 기능
@@ -48,7 +53,7 @@
 | --- | --- |
 | 숙제 부여 · 진도 자동 생성 | `현재 교재 + 마지막 진도 페이지` 기반 다음 분량 자동 생성, 결과는 수정 가능한 초안 |
 | 공유 교재 DB | 위키 방식 등록·보완, 전 계정 공유 (필수 필드: 교재명 · 출판사 · 총 페이지 수) |
-| 과제 제출 · 현황 확인 | 학생 → 선생님 단방향 제출, 촬영 가이드 프레임으로 판독 실패 사전 차단 |
+| 과제 제출 | 학생 → 선생님 단방향 제출 |
 | 알림 | 숙제 부여·수정·취소, 마감 1시간 전 리마인드, 미제출 통보 (FCM) |
 | 반 그룹핑 · 일괄 부여 | 반은 묶음 수단, 과목별 · 선생님별 등 다중 기준 지원 |
 | 휴일 · 휴강일 스케줄러 | 원장 등록, 전 사용자 열람 |
@@ -73,7 +78,7 @@
 
 | 구분 | 사용 기술 |
 | --- | --- |
-| Framework | Next.js `x.x` (App Router) |
+| Framework | Next.js `16.3` (App Router) |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
 | Server State | TanStack Query |
@@ -81,7 +86,7 @@
 | HTTP Client | Axios |
 | Push | Firebase Cloud Messaging |
 | Lint / Format | ESLint, Prettier |
-| Package Manager | pnpm `x.x.x` |
+| Package Manager | pnpm `11.24.0` |
 
 **선택 이유**
 
@@ -96,7 +101,7 @@
 ## 📁 폴더 구조
 
 ```
-liaision/
+liaison/
 ├── public/
 │   └── firebase-messaging-sw.js  # FCM 백그라운드 수신 서비스 워커
 ├── docs/                         # 화면·기능 설계 문서
@@ -161,7 +166,7 @@ liaision/
 | 폴더 | 기준 |
 | --- | --- |
 | `app/` | 라우팅 · 레이아웃만 담당, 화면 로직은 `features/`에 |
-| 라우트 그룹 | `(landing)` SEO 노출 / `(console)` 비노출 — 새 페이지는 반드시 둘 중 하나에 소속 |
+| 라우트 그룹 | `(landing)` SEO 노출 / `(auth)` 로그인 / `(console)` 비노출 — 새 페이지는 반드시 셋 중 하나에 소속 |
 | `features/` | 도메인 단위로 `components` / `hooks` / `api` 배치, 공유 시점에 승격 |
 | `components/ui` | 도메인 지식 없는 순수 UI만, 특정 화면 전용은 `features/`에 |
 | `store/` | 화면 간 유지되는 플로우 상태만, 서버 데이터는 TanStack Query |
@@ -170,45 +175,83 @@ liaision/
 
 ## 🌿 Git 브랜치 전략
 
-| 브랜치 | 용도 |
-| --- | --- |
-| `main` | 배포 |
-| `develop` | 개발 통합 |
-| `feat/*` | 기능 개발 |
-| `fix/*` | 버그 수정 |
-| `design/*` | 화면 UI · CSS 작업 |
-| `refactor/*` | 동작 변화 없는 구조 개선 |
-| `style/*` | 포맷터 적용 등 코드 의미가 바뀌지 않는 변경 |
-| `docs/*` | 문서 작업 |
-| `test/*` | 테스트 코드 작성 |
-| `chore/*` | 패키지 설치, 설정 파일, 빌드 스크립트 |
+브랜치 이름은 `type/작업-요약` 형태로 짓습니다. 작업 요약은 **영문 소문자 + 하이픈(-)** 을 사용합니다.
 
-- 브랜치명은 `type/작업-내용` 형태, 소문자와 하이픈 사용 (예: `feat/homework-create`)
-- 접두사는 **커밋 type과 동일한 기준**을 따름
-- 한 브랜치 안에 다른 type의 커밋이 섞이는 것은 허용, 접두사는 작업의 주된 성격으로 결정
+```
+feat/login-screen
+fix/duplicate-notification
+refactor/api-client
+docs/readme-update
+```
+
+- **`main`**: 기본 브랜치. 직접 푸시하지 않고 **PR을 통해서만** 변경합니다 (브랜치 보호 규칙 적용 중)
+- **작업 브랜치**: 항상 최신 `main`에서 분기해서 작업합니다
+- 접두사 `type`은 **커밋 type과 동일한 기준**을 따릅니다 (`feat` `fix` `refactor` `style` `docs` `test` `chore` `ci`)
+
+**작업 흐름**
+
+1. 최신 `main`에서 작업 브랜치 생성 (`git switch main && git pull && git switch -c feat/login-screen`)
+2. 작업 후 커밋 · 푸시 (커밋 컨벤션 준수)
+3. PR 작성 (PR 템플릿에 맞춰)
+4. 리뷰 · 승인 후 `main`에 머지
+5. **머지된 브랜치는 삭제** (GitHub 머지 화면의 Delete branch 버튼)
+
+- 하나의 브랜치에는 **하나의 작업**만 담습니다 (오래 살아있을수록 충돌이 커짐)
+- 오래 유지해야 한다면 주기적으로 `main`을 머지해 최신 상태 유지
+
+> 자세한 내용은 [브랜치 컨벤션](BRANCH_CONVENTION.md) 참고
 
 ---
 
 ## 📝 커밋 컨벤션
 
+기본 형식은 `type: 작업 요약` 입니다.
+
+- 제목은 **한글로 작성해도 됩니다** (팀 기본은 한글)
+- 제목은 50자 이내로, 마침표 없이 끝냅니다
+- "추가했음", "수정함" 같은 과거형보다 **"추가", "수정" 같은 명사형**으로 끝냅니다
+- 제목만으로 부족하면 한 줄 비우고 본문 작성 — **무엇을**은 제목에, **왜**는 본문에
+
+```
+feat: 로그인 화면 구현
+fix: 알림 중복 발송 수정
+docs: PR 템플릿 추가
+```
+
 | type | 사용 시점 |
 | --- | --- |
-| `feat` | 사용자가 쓸 수 있는 기능이 새로 생겼을 때 |
-| `fix` | 의도대로 동작하지 않던 것을 고쳤을 때 |
-| `refactor` | 동작은 그대로인데 코드 구조·이름을 바꿨을 때 |
-| `style` | 들여쓰기, 세미콜론, 포맷터 적용 등 코드 의미가 바뀌지 않는 변경 |
-| `design` | 화면에 보이는 UI·CSS를 수정했을 때 |
-| `docs` | README, 주석, 설계 문서 등 문서만 수정했을 때 |
-| `test` | 테스트 코드를 추가·수정했을 때 |
-| `chore` | 패키지 설치, 설정 파일, 빌드 스크립트 등 그 외 잡무 |
+| `feat` | 새로운 기능 추가 |
+| `fix` | 버그 수정 |
+| `refactor` | 기능 변화 없는 코드 구조 개선 |
+| `style` | 코드 포맷팅, 세미콜론 등 (동작 변화 없음) |
+| `docs` | 문서 추가/수정 (README, 템플릿 등) |
+| `test` | 테스트 코드 추가/수정 |
+| `chore` | 빌드 설정, 패키지 관리 등 잡무 |
+| `ci` | CI/CD 워크플로우 관련 변경 |
 
-- 한 커밋에 여러 type이 섞이면 커밋을 분리
+- 하나의 커밋에는 **하나의 목적**만 담습니다 (여러 type이 섞이면 커밋 분리)
+- PR 제목도 커밋과 같은 `type: 작업 요약` 형식을 사용합니다
+
+> 자세한 내용은 [커밋 컨벤션](COMMIT_CONVENTION.md) 참고
 
 ---
 
 ## 🔀 PR 규칙
 
-<!-- 추가 예정 -->
+- PR 제목은 커밋과 같은 `type: 작업 요약` 형식 (예: `feat: 로그인 화면 구현`)
+- PR 생성 시 [PR 템플릿](.github/PULL_REQUEST_TEMPLATE.md)이 자동으로 불러와집니다. 아래 항목을 채워주세요.
+
+| 섹션 | 작성 내용 |
+| --- | --- |
+| 📋 작업 내용 | 이 PR에서 한 작업을 한두 문장으로 요약 |
+| 🔍 주요 변경 사항 | 주요 변경 사항을 목록으로 |
+| 🎨 디자인 | 기준이 된 시안(Figma 등) 링크, 시안과 다르게 구현한 부분과 이유 |
+| 📸 스크린샷 | UI 변경 시 스크린샷·영상 (변경 전/후 비교 권장) |
+| 🧪 테스트 방법 | 리뷰어가 변경을 확인하는 방법 |
+| 🔗 관련 이슈 | 관련 이슈 연결 (예: `Closes #12`) |
+| 💬 리뷰어에게 | 집중 리뷰 요청·고민 지점 (없으면 삭제) |
+
+- 리뷰 · 승인 후 `main`에 머지하고 **머지된 브랜치는 삭제**합니다
 
 ---
 
@@ -261,6 +304,7 @@ liaision/
 ```tsx
 // ✅ 올바른 예시
 interface HomeworkCardProps {
+  homeworkId: string;
   textbookName: string;
   pageRange: string;
   dueDate: string;
@@ -269,19 +313,22 @@ interface HomeworkCardProps {
 }
 
 const HomeworkCard = ({
+  homeworkId,
   textbookName,
   pageRange,
   dueDate,
   isSubmitted = false,
   onSelect,
 }: HomeworkCardProps) => {
+  // 카드 전체가 클릭 대상이면 button/Link로 감싸 키보드 접근 보장
+  // (동작이면 button, 상세 페이지 이동이면 next/link의 Link)
   return (
-    <article onClick={() => onSelect(textbookName)}>
+    <button type="button" onClick={() => onSelect(homeworkId)}>
       <h3>{textbookName}</h3>
       <p>{pageRange}</p>
       <time>{dueDate}</time>
       <Badge variant={isSubmitted ? 'done' : 'pending'} />
-    </article>
+    </button>
   );
 };
 
@@ -335,14 +382,14 @@ import type { HomeworkItem } from '@/types';
 | 항목 | 버전 |
 | --- | --- |
 | Node.js | `20.x` 이상 (LTS 권장) |
-| pnpm | `x.x.x` — 미설치 시 `corepack enable pnpm` |
+| pnpm | `11.24.0` — 미설치 시 `corepack enable pnpm` |
 
 ### 설치 및 실행
 
 ```bash
 # 저장소 클론
 git clone <repository-url>
-cd liaision
+cd liaison
 
 # 의존성 설치
 pnpm install

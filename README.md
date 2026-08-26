@@ -1,4 +1,14 @@
-# liaision
+
+
+# liaison-web
+
+## 📚 컨벤션
+
+작업 전에 아래 문서를 확인해주세요.
+
+- [커밋 컨벤션](COMMIT_CONVENTION.md)
+- [브랜치 컨벤션](BRANCH_CONVENTION.md)
+- [PR 템플릿](.github/PULL_REQUEST_TEMPLATE.md)
 
 > 학원 숙제 공지와 학생별 진도를 함께 관리하는 알림장 서비스, `liaision`의 프론트엔드 레포지토리입니다.
 

@@ -151,7 +151,7 @@ liaison/
 │   ├── types/
 │   │   └── index.ts
 │   │
-│   └── middleware.ts             # 로그인 가드 + 역할 기반 접근 제어
+│   └── proxy.ts                  # 로그인 가드 + 역할 기반 접근 제어
 │
 ├── .env.example
 ├── eslint.config.mjs

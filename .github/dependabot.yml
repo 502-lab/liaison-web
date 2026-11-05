@@ -1,8 +1,9 @@
 # Dependabot 설정
 # - 공통 문서(docs/common) 서브모듈: 매일 확인(규칙 변경이 빨리 반영되도록). 서브모듈이 하나라 PR은 1건만 열리고, 더 새 버전이 나오면 그 PR이 새것으로 바뀐다.
-# - 액션: 매월 확인하고 PR 하나로 묶는다.
-# - npm 패키지는 Next.js 설정(#9)이 병합된 뒤 같은 방식(매월, minor·patch 묶음)으로 추가한다.
-# - 보안 업데이트는 저장소 설정(Dependabot security updates)이 이 일정과 상관없이 바로 따로 올린다.
+# - 액션: 매월 확인하고 PR 하나로 묶는다. 새 버전이 나온 지 7일이 지나야 PR을 연다(대기 기간, 막 올라온 악성 버전 회피).
+# - npm 패키지는 Next.js 설정(#9)이 병합된 뒤 같은 방식(매월, minor·patch 묶음, 대기 기간 7일·major 30일)으로 추가한다.
+#   pnpm 자체도 나온 지 24시간이 안 된 버전은 설치하지 않는다(pnpm 11 기본값).
+# - 보안 업데이트는 저장소 설정(Dependabot security updates)이 이 일정·대기 기간과 상관없이 바로 따로 올린다.
 version: 2
 updates:
   - package-ecosystem: gitsubmodule
@@ -16,6 +17,8 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 7
     groups:
       github-actions:
         patterns: ["*"]

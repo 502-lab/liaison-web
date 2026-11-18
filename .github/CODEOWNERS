@@ -1,0 +1,19 @@
+# 코드 소유자 (liaison-web)
+# - 웹 PR은 web-owners 중 작성자가 아닌 한 명이 승인하면 병합됩니다(운영자 결정, 11/16).
+# - 인프라 파일도 같은 규칙입니다(운영자 결정, 11/16: 인프라 경로에 운영자 승인 필수를 두지 않음).
+# - 아래쪽 줄이 위쪽 줄보다 우선합니다.
+
+# 웹 전체: web-owners 승인
+*                        @502-lab/web-owners
+
+# 인프라 파일: web-owners 중 작성자가 아닌 한 명 승인
+/.github/                @502-lab/web-owners
+/.githooks/              @502-lab/web-owners
+/Dockerfile              @502-lab/web-owners
+/.dockerignore           @502-lab/web-owners
+/docker-compose*.yml     @502-lab/web-owners
+/deploy/                 @502-lab/web-owners
+/.gitmodules             @502-lab/web-owners
+/.coderabbit.yaml        @502-lab/web-owners
+/.env.example            @502-lab/web-owners
+/.gitleaks.toml          @502-lab/web-owners

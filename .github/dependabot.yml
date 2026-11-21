@@ -10,6 +10,9 @@ updates:
     directory: /
     schedule:
       interval: daily
+    # Dependabot은 설정이 없어도 기본 대기 기간 3일을 둔다. 우리 공통 문서는 바로 따라가야 하므로 이 항목에서만 뺀다.
+    cooldown:
+      exclude: ["*"]
     commit-message:
       prefix: chore
 
